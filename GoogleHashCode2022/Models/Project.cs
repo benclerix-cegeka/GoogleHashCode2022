@@ -10,5 +10,6 @@ namespace GoogleHashCode2022.Models
         public int S_ScoreForCompletion { get; set; }
         public int B_BestBefore { get; set; }
         public int R_NumberOfRoles { get; set; }
+        public bool Done { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GoogleHashCode2022.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GoogleHashCode2021
 {
@@ -20,7 +21,7 @@ namespace GoogleHashCode2021
                 foreach (var solution in Solutions)
                 {
                     streamWriter.WriteLine(solution.ProjectName);
-                    streamWriter.WriteLine(string.Join(" ", solution.Contributers));
+                    streamWriter.WriteLine(string.Join(" ", solution.Contributers.Select(x => x.Name)));
                 }
             }
         }
