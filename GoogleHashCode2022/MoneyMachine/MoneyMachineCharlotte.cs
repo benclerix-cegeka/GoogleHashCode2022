@@ -18,7 +18,7 @@ namespace GoogleHashCode2022
                 .Where(x => x.D_NumberOfDaysToComplete <= x.B_BestBefore)
                 .OrderBy(x => x.B_BestBefore)
                 .ThenBy(x => x.RequiredSkills.Count())
-                .ThenBy(x => x.S_ScoreForCompletion);
+                .ThenByDescending(x => x.S_ScoreForCompletion);
 
             var availableContributors = input.Contributors.OrderBy(x => x.Skills.Count()).ToList();
 
@@ -30,8 +30,8 @@ namespace GoogleHashCode2022
                 {
                     var contributor = availableContributors.Find(c => !contributors.Contains(c)
                         && ((c.NDaysBusy + project.D_NumberOfDaysToComplete) <= project.B_BestBefore)
-                        && (c.HasExactlyEnoughSkills(requiredSkill) || c.HasEnoughSkills(requiredSkill))
-                        || (c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
+                        && (c.HasExactlyEnoughSkills(requiredSkill) || c.HasEnoughSkills(requiredSkill)
+                        || (c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill)))));
 
                     if (contributor != null)
                     {
