@@ -21,7 +21,7 @@ namespace GoogleHashCode2021
                 foreach (var solution in Solutions)
                 {
                     streamWriter.WriteLine(solution.ProjectName);
-                    streamWriter.WriteLine(string.Join(" ", solution.Contributers.Select(x => x.Name)));
+                    streamWriter.WriteLine(string.Join(" ", solution.Contributers));
                 }
             }
         }

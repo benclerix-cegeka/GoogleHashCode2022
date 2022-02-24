@@ -44,7 +44,7 @@ namespace GoogleHashCode2022
 
         private static Solution GetSolution(Project project, List<Contributor> contributors)
         {
-            var solution = new Solution { ProjectName = project.Name, Contributers = new List<ProjecMember>() };
+            var solution = new Solution { ProjectName = project.Name, Contributers = new List<string>() };
 
             foreach (var skill in project.RequiredSkills)
             {
@@ -55,7 +55,7 @@ namespace GoogleHashCode2022
                     return null;
                 }
 
-                solution.Contributers.Add(new ProjecMember{Name = result.Name, Skill = skill});
+                solution.Contributers.Add(result.Name);
             }
 
             return solution;

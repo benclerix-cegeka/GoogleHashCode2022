@@ -7,6 +7,6 @@ namespace GoogleHashCode2022.Models
     {
         public string ProjectName { get; set; }
 
-        public List<ProjecMember> Contributers { get; set; }
+        public List<string> Contributers { get; set; }
     }
 }
