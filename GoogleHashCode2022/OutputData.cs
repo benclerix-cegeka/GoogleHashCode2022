@@ -6,8 +6,6 @@ namespace GoogleHashCode2021
 {
     public class OutputData
     {
-        //public List<SomeType> SomeProperty { get; set; }
-
         public List<Solution> Solutions { get; set; }
 
         public void WriteToOutputFile(string fileName)
@@ -18,9 +16,12 @@ namespace GoogleHashCode2021
 
             using (var streamWriter = new StreamWriter(outputPath))
             {
-                //streamWriter.WriteLine(SomeProperty.Count);
-
-
+                streamWriter.WriteLine(Solutions.Count);
+                foreach (var solution in Solutions)
+                {
+                    streamWriter.WriteLine(solution.ProjectName);
+                    streamWriter.WriteLine(string.Join(" ", solution.Contributers));
+                }
             }
         }
     }
