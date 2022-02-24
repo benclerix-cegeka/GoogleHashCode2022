@@ -1,6 +1,5 @@
 ﻿using GoogleHashCode2021;
 using GoogleHashCode2022.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,8 +14,11 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
-            var projects = input.Projects.OrderByDescending(p =>
-                p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
+            var projects = input.Projects
+                .Where(x => x.D_NumberOfDaysToComplete <= x.B_BestBefore)
+                .OrderBy(x => x.B_BestBefore)
+                .ThenBy(x => x.RequiredSkills.Count())
+                .ThenBy(x => x.S_ScoreForCompletion);
 
             var availableContributors = input.Contributors.OrderBy(x => x.Skills.Count()).ToList();
 
@@ -26,15 +28,18 @@ namespace GoogleHashCode2022
                 var contributors = new List<Contributor>();
                 foreach (var requiredSkill in project.RequiredSkills)
                 {
-                    var contributor = availableContributors.Find(c => !contributors.Contains(c) 
-                        && ((c.NDaysBusy + project.D_NumberOfDaysToComplete) <= project.B_BestBefore) 
+                    var contributor = availableContributors.Find(c => !contributors.Contains(c)
+                        && ((c.NDaysBusy + project.D_NumberOfDaysToComplete) <= project.B_BestBefore)
                         && (c.HasExactlyEnoughSkills(requiredSkill) || c.HasEnoughSkills(requiredSkill))
                         || (c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
 
                     if (contributor != null)
                     {
-                        contributor.DoProject(0, project.D_NumberOfDaysToComplete);
-                        contributor.CompleteProject(requiredSkill);
+                        contributor.DoProject(project.D_NumberOfDaysToComplete);
+
+                        if (contributor.Skills.Find(x => x.Name == requiredSkill.Name).Level <= requiredSkill.Level)
+                            contributor.LevelUp(requiredSkill);
+
                         contributors.Add(contributor);
                     }
                 }

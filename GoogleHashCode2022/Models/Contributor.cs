@@ -12,7 +12,7 @@ namespace GoogleHashCode2022.Models
 
         public int NDaysBusy { get; set; }
 
-        public void DoProject(int startTime, int nTimeToComplete)
+        public void DoProject(int nTimeToComplete)
         {
             NDaysBusy += nTimeToComplete;
         }
@@ -39,7 +39,7 @@ namespace GoogleHashCode2022.Models
             return Skills.Any(s => s.Name == requiredSkill.Name && s.Level == requiredSkill.Level - 1);
         }
 
-        public void CompleteProject(Skill skill)
+        public void LevelUp(Skill skill)
         {
             skill.Level++;
         }
