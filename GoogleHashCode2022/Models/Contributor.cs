@@ -8,15 +8,18 @@ namespace GoogleHashCode2022.Models
         public string Name { get; set; }
         public List<Skill> Skills { get; set; }
         public bool IsBusy { get; set; }
-        public Dictionary<int, bool> IsBusyInTime { get; set; } = new Dictionary<int, bool>();
+        //public Dictionary<int, bool> IsBusyInTime { get; set; } = new Dictionary<int, bool>();
 
+        public int NDaysBusy { get; set; }
 
         public void DoProject(int startTime, int nTimeToComplete)
         {
-            for (int t = startTime; t < nTimeToComplete; t++)
-            {
-                IsBusyInTime.Add(t, true);
-            }
+            NDaysBusy += nTimeToComplete;
+        }
+
+        public bool HasExactlyEnoughSkills(Skill requiredSkill)
+        {
+            return Skills.Any(s => s.Name == requiredSkill.Name && s.Level == requiredSkill.Level);
         }
 
         public int UnOccuppiedFromDay { get; set; }

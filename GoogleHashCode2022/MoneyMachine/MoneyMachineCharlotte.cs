@@ -18,17 +18,23 @@ namespace GoogleHashCode2022
             var projects = input.Projects.OrderByDescending(p =>
                 p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
 
+            var availableContributors = input.Contributors.OrderBy(x => x.Skills.Count()).ToList();
+
+
             foreach (var project in projects)
             {
                 var contributors = new List<Contributor>();
                 foreach (var requiredSkill in project.RequiredSkills)
                 {
-                    var contributor = input.Contributors.Find(c => !c.IsBusy &&
-                        (c.HasEnoughSkills(requiredSkill) || c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
+                    var contributor = availableContributors.Find(c => !contributors.Contains(c) 
+                        && ((c.NDaysBusy + project.D_NumberOfDaysToComplete) <= project.B_BestBefore) 
+                        && (c.HasExactlyEnoughSkills(requiredSkill) || c.HasEnoughSkills(requiredSkill))
+                        || (c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
 
                     if (contributor != null)
                     {
-                        contributor.IsBusy = true;
+                        contributor.DoProject(0, project.D_NumberOfDaysToComplete);
+                        contributor.CompleteProject(requiredSkill);
                         contributors.Add(contributor);
                     }
                 }
@@ -47,6 +53,5 @@ namespace GoogleHashCode2022
 
             return output;
         }
-
     }
 }
