@@ -8,7 +8,9 @@ namespace GoogleHashCode2021
 
         public void WriteToOutputFile(string fileName)
         {
-            var outputPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Output", fileName);
+            var directory = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Output");
+            Directory.CreateDirectory(directory);
+            var outputPath = Path.Combine(directory, fileName);
 
             using (var streamWriter = new StreamWriter(outputPath))
             {
