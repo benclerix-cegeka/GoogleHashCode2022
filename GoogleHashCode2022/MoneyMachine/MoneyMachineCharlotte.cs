@@ -15,30 +15,34 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
-            Dictionary<string, Tuple<int, string>> skillOverview = new Dictionary<string, Tuple<int, string>>();
-            foreach (var contributor in input.Contributors)
-            {
-                foreach (var skill in contributor.Skills)
-                {
-                    skillOverview.Add(skill.Name, new Tuple<int, string>(skill.Level, contributor.Name));
-                }
-            }
+            var projects = input.Projects.OrderByDescending(p =>
+                p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
 
-            foreach (var project in input.Projects)
+            foreach (var project in projects)
             {
+                var contributors = new List<Contributor>();
                 foreach (var requiredSkill in project.RequiredSkills)
                 {
-                    input.Contributors.Find(c => c.Skills.Any(s => s.Name == requiredSkill.Name && s.Level >= requiredSkill.Level));
+                    var contributor = input.Contributors.Find(c => !c.IsBusy &&
+                        (c.HasEnoughSkills(requiredSkill) || c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
+
+                    if (contributor != null)
+                    {
+                        contributor.IsBusy = true;
+                        contributors.Add(contributor);
+                    }
                 }
 
-                var contributors = input.Contributors;
-
-                var sln = new Solution
+                if (project.R_NumberOfRoles == contributors.Count())
                 {
-                    ProjectName = project.Name,
-                };
+                    var sln = new Solution
+                    {
+                        ProjectName = project.Name,
+                        Contributers = contributors.Select(x => x.Name).ToList()
+                    };
 
-                output.Solutions.Add(sln);
+                    output.Solutions.Add(sln);
+                }
             }
 
             return output;

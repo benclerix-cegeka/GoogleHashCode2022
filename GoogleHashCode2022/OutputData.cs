@@ -1,6 +1,7 @@
 ﻿using GoogleHashCode2022.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GoogleHashCode2021
 {
