@@ -15,30 +15,39 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
-            Dictionary<string, Tuple<int, string>> skillOverview = new Dictionary<string, Tuple<int, string>>();
-            foreach (var contributor in input.Contributors)
-            {
-                foreach (var skill in contributor.Skills)
-                {
-                    skillOverview.Add(skill.Name, new Tuple<int, string>(skill.Level, contributor.Name));
-                }
-            }
+            //Dictionary<string, Tuple<int, string>> skillOverview = new Dictionary<string, Tuple<int, string>>();
+            //foreach (var contributor in input.Contributors)
+            //{
+            //    foreach (var skill in contributor.Skills)
+            //    {
+            //        skillOverview.Add(skill.Name, new Tuple<int, string>(skill.Level, contributor.Name));
+            //    }
+            //}
 
             foreach (var project in input.Projects)
             {
+                var contributors = new List<string>();
                 foreach (var requiredSkill in project.RequiredSkills)
                 {
-                    input.Contributors.Find(c => c.Skills.Any(s => s.Name == requiredSkill.Name && s.Level >= requiredSkill.Level));
+                    var contributor = input.Contributors.Find(c => c.HasEnoughSkills(requiredSkill) && !c.IsBusy);
+
+                    if (contributor != null)
+                    {
+                        contributor.IsBusy = true;
+                        contributors.Add(contributor.Name);
+                    }
                 }
 
-                var contributors = input.Contributors;
-
-                var sln = new Solution
+                if (project.R_NumberOfRoles == contributors.Count())
                 {
-                    ProjectName = project.Name,
-                };
+                    var sln = new Solution
+                    {
+                        ProjectName = project.Name,
+                        Contributers = contributors
+                    };
 
-                output.Solutions.Add(sln);
+                    output.Solutions.Add(sln);
+                }
             }
 
             return output;
