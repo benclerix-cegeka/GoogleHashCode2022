@@ -22,9 +22,7 @@ namespace GoogleHashCode2022
 
                 Solution solution = new Solution();
                 solution.ProjectName = project.Name;
-                var projectStartDay = Math.Max(0, project.B_BestBefore - project.D_NumberOfDaysToComplete - 1);
-                var projectEndDay = projectStartDay + project.D_NumberOfDaysToComplete;
-                solution.Contributers = GetProjectContributors(project.RequiredSkills, availableContributes, projectStartDay, projectEndDay);
+                solution.Contributers = GetProjectContributors(project, availableContributes);
 
                 if (solution.Contributers.Count == project.RequiredSkills.Count)
                 {
@@ -35,26 +33,72 @@ namespace GoogleHashCode2022
             return new OutputData { Solutions = solutions };
         }
 
-        private static List<string> GetProjectContributors(List<Skill> projectSkills, List<Contributor> availableContributes, int projectStartDay, int projectEndDay)
+        private static int GetProjectStartDay(Project project)
+            => Math.Max(0, project.B_BestBefore - project.D_NumberOfDaysToComplete - 1);
+
+        private static int GetProjectEndDay(Project project)
+            => GetProjectStartDay(project) + project.D_NumberOfDaysToComplete;
+
+        private static List<string> GetProjectContributors(Project project, List<Contributor> availableContributes)
         {
             List<Contributor> contributors = new List<Contributor>();
 
-            foreach (var projectSkill in projectSkills)
+            while (contributors.Count != project.RequiredSkills.Count)
             {
-                var contributor = availableContributes.FirstOrDefault(x =>
-                    x.Skills.Any(skill => 
-                        skill.Name == projectSkill.Name
-                        && skill.Level >= projectSkill.Level)
-                    && x.UnOccuppiedFromDay <= projectStartDay);
+                contributors.Clear();
 
-                if (contributor == null)
-                    break;
+                foreach (var projectSkill in project.RequiredSkills)
+                {
+                    var contributor = availableContributes
+                        .Except(contributors)
+                        .FirstOrDefault(x =>
+                            x.Skills.Any(skill =>
+                                skill.Name == projectSkill.Name
+                                && skill.Level >= projectSkill.Level)
+                            && x.UnOccuppiedFromDay <= GetProjectStartDay(project));
 
-                contributor.UnOccuppiedFromDay = projectEndDay + 1;
-                contributors.Add(contributor);
+                    if (contributor == null)
+                    {
+                        IEnumerable<Contributor> contributorsWithRequiredSkill =
+                            availableContributes
+                                .Where(x =>
+                                    x.Skills.Any(skill =>
+                                        skill.Name == projectSkill.Name
+                                        && skill.Level >= projectSkill.Level));
+
+                        if (contributorsWithRequiredSkill.Any())
+                        {
+                            // Push deadline
+                            var newProjectStartDay = contributorsWithRequiredSkill
+                                .Select(x => x.UnOccuppiedFromDay)
+                                .Min();
+                            project.B_BestBefore = Math.Max(project.B_BestBefore, newProjectStartDay + project.D_NumberOfDaysToComplete + 1);
+
+                            // Rescan all skills with new deadline
+                            break;
+                        }
+                        else
+                        {
+                            // Can't do project. Probably need skill levelling support
+                            return new List<string>();
+                        }
+                    }
+
+                    contributors.Add(contributor);
+                }
             }
 
+            AssignContributorsToProject(project, contributors);
+
             return contributors.Select(x => x.Name).ToList();
+        }
+
+        private static void AssignContributorsToProject(Project project, List<Contributor> contributors)
+        {
+            foreach (var contributor in contributors)
+            {
+                contributor.UnOccuppiedFromDay = GetProjectEndDay(project) + 1;
+            }
         }
     }
 }
