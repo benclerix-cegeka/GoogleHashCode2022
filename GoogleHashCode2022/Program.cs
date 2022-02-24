@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoogleHashCode2022;
+using System;
 using System.IO;
 
 namespace GoogleHashCode2021
@@ -14,21 +15,12 @@ namespace GoogleHashCode2021
             {
                 Console.WriteLine($"Calculating solution for file {file}");
                 var inputData = new InputData(file);
-                var outputData = CalculateSolution(inputData);
+                var outputData = MoneyMachineMaarten.CalculateSolution(inputData);
                 outputData.WriteToOutputFile(Path.GetFileName(file));
             }
 
             Console.WriteLine("Done...");
             Console.ReadKey();
-        }
-
-        private static OutputData CalculateSolution(InputData input)
-        {
-            var output = new OutputData();
-
-            throw new NotImplementedException();
-
-            return output;
         }
     }
 }

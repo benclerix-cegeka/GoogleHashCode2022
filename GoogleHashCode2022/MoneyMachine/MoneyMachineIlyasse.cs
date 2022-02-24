@@ -8,7 +8,7 @@ namespace GoogleHashCode2022
     public class MoneyMachineIlyasse
     {
 
-        public List<Solution> GenerateSolution(List<Contributer> contributers, List<Project> projects)
+        public List<Solution> GenerateSolution(List<Contributor> contributers, List<Project> projects)
         {
             
             return new List<Solution>();
