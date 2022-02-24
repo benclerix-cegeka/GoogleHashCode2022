@@ -17,8 +17,11 @@ namespace GoogleHashCode2021
             {
                 // First line
                 var line = reader.ReadLine();
+
                 var l = line.Split(' ');
 
+
+           
                 //A_SomeProperty = int.Parse(l[0]);
             }
         }
