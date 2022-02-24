@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoogleHashCode2022.Models
+﻿namespace GoogleHashCode2022.Models
 {
     public class Skill
     {
+        public string Name { get; set; }
         public int Level { get; set; }
-        public List<string> SkillType{ get; set; }
     }
 }
