@@ -23,5 +23,20 @@ namespace GoogleHashCode2022.Models
         {
             return Skills.Any(s => s.Name == requiredSkill.Name && s.Level >= requiredSkill.Level);
         }
+
+        public bool CanBeMentor(Skill requiredSkill)
+        {
+            return Skills.Any(s => s.Name == requiredSkill.Name && s.Level > requiredSkill.Level);
+        }
+
+        public bool CanUseMentor(Skill requiredSkill)
+        {
+            return Skills.Any(s => s.Name == requiredSkill.Name && s.Level == requiredSkill.Level - 1);
+        }
+
+        public void CompleteProject(Skill skill)
+        {
+            skill.Level++;
+        }
     }
 }

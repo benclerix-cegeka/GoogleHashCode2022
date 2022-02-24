@@ -15,19 +15,21 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
-            var projects = input.Projects.OrderByDescending(p => p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
+            var projects = input.Projects.OrderByDescending(p =>
+                p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
 
             foreach (var project in projects)
             {
-                var contributors = new List<string>();
+                var contributors = new List<Contributor>();
                 foreach (var requiredSkill in project.RequiredSkills)
                 {
-                    var contributor = input.Contributors.Find(c => c.HasEnoughSkills(requiredSkill) && !c.IsBusy);
+                    var contributor = input.Contributors.Find(c => !c.IsBusy &&
+                        (c.HasEnoughSkills(requiredSkill) || c.CanUseMentor(requiredSkill) && contributors.Any(x => x.CanBeMentor(requiredSkill))));
 
                     if (contributor != null)
                     {
                         contributor.IsBusy = true;
-                        contributors.Add(contributor.Name);
+                        contributors.Add(contributor);
                     }
                 }
 
@@ -36,7 +38,7 @@ namespace GoogleHashCode2022
                     var sln = new Solution
                     {
                         ProjectName = project.Name,
-                        Contributers = contributors
+                        Contributers = contributors.Select(x => x.Name)
                     };
 
                     output.Solutions.Add(sln);
