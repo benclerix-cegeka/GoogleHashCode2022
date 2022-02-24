@@ -15,14 +15,6 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
-            //Dictionary<string, Tuple<int, string>> skillOverview = new Dictionary<string, Tuple<int, string>>();
-            //foreach (var contributor in input.Contributors)
-            //{
-            //    foreach (var skill in contributor.Skills)
-            //    {
-            //        skillOverview.Add(skill.Name, new Tuple<int, string>(skill.Level, contributor.Name));
-            //    }
-            //}
 
             foreach (var project in input.Projects)
             {
