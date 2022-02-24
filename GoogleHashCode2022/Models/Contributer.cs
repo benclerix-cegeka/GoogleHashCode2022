@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace GoogleHashCode2022.Models
 {
     internal class Contributer
     {
-        public List<Skill> Skills{ get; set; }
+        public string Name { get; set; }
+        public List<Skill> Skills { get; set; }
     }
 }
