@@ -15,8 +15,9 @@ namespace GoogleHashCode2022
                 Solutions = new List<Solution>()
             };
 
+            var projects = input.Projects.OrderByDescending(p => p.S_ScoreForCompletion / p.D_NumberOfDaysToComplete / p.RequiredSkills.Count() * p.B_BestBefore);
 
-            foreach (var project in input.Projects)
+            foreach (var project in projects)
             {
                 var contributors = new List<string>();
                 foreach (var requiredSkill in project.RequiredSkills)

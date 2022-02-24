@@ -15,7 +15,7 @@ namespace GoogleHashCode2021
             {
                 Console.WriteLine($"Calculating solution for file {file}");
                 var inputData = new InputData(file);
-                var outputData = MoneyMachineMaarten.CalculateSolution(inputData);
+                var outputData = MoneyMachineCharlotte.CalculateSolution(inputData);
                 outputData.WriteToOutputFile(Path.GetFileName(file));
             }
 
