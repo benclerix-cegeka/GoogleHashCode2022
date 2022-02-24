@@ -38,7 +38,7 @@ namespace GoogleHashCode2022
                     var sln = new Solution
                     {
                         ProjectName = project.Name,
-                        Contributers = contributors.Select(x => x.Name)
+                        Contributers = contributors.Select(x => x.Name).ToList()
                     };
 
                     output.Solutions.Add(sln);
