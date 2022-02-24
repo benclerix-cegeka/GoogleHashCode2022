@@ -9,6 +9,8 @@ namespace GoogleHashCode2022.Models
         public List<Skill> Skills { get; set; }
         public bool IsBusy { get; set; }
 
+        public int UnOccuppiedFromDay { get; set; }
+
         public bool HasEnoughSkills(Skill requiredSkill)
         {
             return Skills.Any(s => s.Name == requiredSkill.Name && s.Level >= requiredSkill.Level);
