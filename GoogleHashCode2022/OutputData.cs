@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿using GoogleHashCode2022.Models;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GoogleHashCode2021
 {
     public class OutputData
     {
         //public List<SomeType> SomeProperty { get; set; }
+
+        public List<Solution> Solutions { get; set; }
 
         public void WriteToOutputFile(string fileName)
         {
